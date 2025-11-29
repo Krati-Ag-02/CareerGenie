@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Progress - CareerGenie</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none;">
+                    <span class="logo">✨ CareerGenie</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="/career.html">Career</a>
+                <a href="/resume-builder.html">Resume</a>
+                <a href="/roles.html">Interview</a>
+                <a href="/progress.html" style="color: var(--primary);">Progress</a>
+                <a href="/profile.html" class="btn btn-primary">My Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section style="background: var(--gradient); color: white; padding: 4rem 0 2rem; text-align: center;">
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">📊 Your Career Progress</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">Track your journey and celebrate your achievements</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section style="padding: 3rem 0; min-height: 70vh;">
+        <div class="container">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                
+                <!-- Loading State -->
+                <div id="loadingProgress" style="text-align: center; padding: 3rem;">
+                    <div style="display: inline-block; width: 50px; height: 50px; border: 4px solid var(--gray-200); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 1rem; color: var(--gray-600);">Loading your progress...</p>
+                </div>
+
+                <!-- Progress Content -->
+                <div id="progressContent" style="display: none;">
+                    
+                    <!-- Stats Overview -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                        
+                        <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow); text-align: center;">
+                            <div style="width: 80px; height: 80px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem;">
+                                📄
+                            </div>
+                            <h3 id="resumeCount" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">0</h3>
+                            <p style="color: var(--gray-600); font-weight: 500;">Resumes Created</p>
+                        </div>
+
+                        <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow); text-align: center;">
+                            <div style="width: 80px; height: 80px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem;">
+                                💡
+                            </div>
+                            <h3 id="interviewCount" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">0</h3>
+                            <p style="color: var(--gray-600); font-weight: 500;">Mock Interviews</p>
+                        </div>
+
+                        <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow); text-align: center;">
+                            <div style="width: 80px; height: 80px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem;">
+                                🎯
+                            </div>
+                            <h3 id="careerCount" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">0</h3>
+                            <p style="color: var(--gray-600); font-weight: 500;">Career Searches</p>
+                        </div>
+
+                        <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow); text-align: center;">
+                            <div style="width: 80px; height: 80px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem;">
+                                ⭐
+                            </div>
+                            <h3 id="avgScore" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem;">0</h3>
+                            <p style="color: var(--gray-600); font-weight: 500;">Avg Interview Score</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Badges Section -->
+                    <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-bottom: 2rem;">
+                        <h2 style="margin-bottom: 1.5rem; color: var(--gray-900);">🏆 Your Badges</h2>
+                        <div id="badgesContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">
+                            <!-- Badges will be dynamically inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Progress Chart -->
+                    <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-bottom: 2rem;">
+                        <h2 style="margin-bottom: 1.5rem; color: var(--gray-900);">📈 Your Journey</h2>
+                        <div style="height: 300px; display: flex; align-items: end; justify-content: space-around; background: var(--gray-100); border-radius: var(--radius); padding: 2rem;">
+                            <div style="text-align: center; width: 100%;">
+                                <div style="background: var(--primary); height: 100px; width: 80px; margin: 0 auto 1rem; border-radius: var(--radius);"></div>
+                                <p style="color: var(--gray-700); font-weight: 600;">Resumes</p>
+                            </div>
+                            <div style="text-align: center; width: 100%;">
+                                <div style="background: var(--secondary); height: 150px; width: 80px; margin: 0 auto 1rem; border-radius: var(--radius);"></div>
+                                <p style="color: var(--gray-700); font-weight: 600;">Interviews</p>
+                            </div>
+                            <div style="text-align: center; width: 100%;">
+                                <div style="background: var(--info); height: 120px; width: 80px; margin: 0 auto 1rem; border-radius: var(--radius);"></div>
+                                <p style="color: var(--gray-700); font-weight: 600;">Career Matches</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Next Steps -->
+                    <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow);">
+                        <h2 style="margin-bottom: 1.5rem; color: var(--gray-900);">🎯 Recommended Next Steps</h2>
+                        <div id="recommendations" style="display: grid; gap: 1rem;">
+                            <!-- Dynamic recommendations -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot -->
+    <button class="chatbot-button" onclick="openChatbot()">
+        <span class="chatbot-icon">💬</span>
+    </button>
+
+    <div id="chatbotModal" class="chatbot-modal">
+        <div class="chatbot-container">
+            <div class="chatbot-header">
+                <h3>🤖 CareerGenie Assistant</h3>
+                <button onclick="closeChatbot()" class="close-btn">&times;</button>
+            </div>
+            <div id="chatMessages" class="chatbot-messages"></div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask about your progress..." onkeypress="handleChatKeyPress(event)">
+                <button onclick="sendMessage()" class="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        // Check authentication
+        async function checkAuth() {
+            const response = await fetch('/api/auth/check');
+            const data = await response.json();
+            if (!data.authenticated) {
+                window.location.href = '/auth/login.html';
+            }
+        }
+        checkAuth();
+
+        // Badge definitions
+        const allBadges = [
+            { id: 'first_resume', name: 'First Resume', icon: '📄', description: 'Created your first resume', condition: 'totalResumes >= 1' },
+            { id: 'resume_pro', name: 'Resume Pro', icon: '📚', description: 'Created 5 resumes', condition: 'totalResumes >= 5' },
+            { id: 'interview_starter', name: 'Interview Starter', icon: '💡', description: 'Completed first mock interview', condition: 'totalInterviews >= 1' },
+            { id: 'interview_master', name: 'Interview Master', icon: '🎯', description: 'Completed 10 mock interviews', condition: 'totalInterviews >= 10' },
+            { id: 'career_explorer', name: 'Career Explorer', icon: '🧭', description: 'Explored career recommendations', condition: 'totalCareerSearches >= 1' },
+            { id: 'high_scorer', name: 'High Scorer', icon: '⭐', description: 'Average interview score above 80', condition: 'averageInterviewScore >= 80' }
+        ];
+
+        // Load progress data
+        async function loadProgress() {
+            try {
+                const response = await fetch('/api/progress/');
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayProgress(data.progress);
+                } else {
+                    throw new Error('Failed to load progress');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loadingProgress').innerHTML = '<p style="color: var(--danger);">Failed to load progress. Please refresh the page.</p>';
+            }
+        }
+
+        function displayProgress(progress) {
+            document.getElementById('loadingProgress').style.display = 'none';
+            document.getElementById('progressContent').style.display = 'block';
+            
+            // Update stats
+            document.getElementById('resumeCount').textContent = progress.totalResumes || 0;
+            document.getElementById('interviewCount').textContent = progress.totalInterviews || 0;
+            document.getElementById('careerCount').textContent = progress.totalCareerSearches || 0;
+            document.getElementById('avgScore').textContent = progress.averageInterviewScore || 0;
+            
+            // Display badges
+            displayBadges(progress);
+            
+            // Show recommendations
+            showRecommendations(progress);
+        }
+
+        function displayBadges(progress) {
+            const container = document.getElementById('badgesContainer');
+            const earnedBadges = progress.badges || [];
+            
+            container.innerHTML = allBadges.map(badge => {
+                const earned = earnedBadges.includes(badge.name);
+                return `
+                    <div style="
+                        background: ${earned ? 'var(--gradient)' : 'var(--gray-200)'};
+                        color: ${earned ? 'white' : 'var(--gray-500)'};
+                        padding: 1.5rem;
+                        border-radius: var(--radius-lg);
+                        text-align: center;
+                        transition: var(--transition);
+                        ${earned ? 'box-shadow: var(--shadow-lg);' : ''}
+                    ">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem; filter: ${earned ? 'none' : 'grayscale(100%)'};opacity:${earned ? '1' : '0.5'};">
+                            ${badge.icon}
+                        </div>
+                        <h4 style="margin-bottom: 0.5rem; font-size: 1rem;">${badge.name}</h4>
+                        <p style="font-size: 0.85rem; opacity: 0.9;">${badge.description}</p>
+                        ${earned ? '<div style="margin-top: 0.5rem; font-weight: 600;">✓ Earned</div>' : '<div style="margin-top: 0.5rem; font-size: 0.85rem;">Not earned yet</div>'}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showRecommendations(progress) {
+            const container = document.getElementById('recommendations');
+            const recommendations = [];
+            
+            if (progress.totalResumes === 0) {
+                recommendations.push({
+                    icon: '📄',
+                    title: 'Create Your First Resume',
+                    description: 'Start by building a professional resume',
+                    link: '/resume-builder.html',
+                    linkText: 'Build Resume'
+                });
+            }
+            
+            if (progress.totalInterviews === 0) {
+                recommendations.push({
+                    icon: '💡',
+                    title: 'Practice Your First Interview',
+                    description: 'Get comfortable with interview questions',
+                    link: '/roles.html',
+                    linkText: 'Start Practice'
+                });
+            }
+            
+            if (progress.totalCareerSearches === 0) {
+                recommendations.push({
+                    icon: '🎯',
+                    title: 'Explore Career Options',
+                    description: 'Discover careers that match your skills',
+                    link: '/career.html',
+                    linkText: 'Get Recommendations'
+                });
+            }
+            
+            if (progress.totalInterviews > 0 && progress.averageInterviewScore < 70) {
+                recommendations.push({
+                    icon: '📈',
+                    title: 'Improve Your Interview Score',
+                    description: 'Practice more to boost your performance',
+                    link: '/roles.html',
+                    linkText: 'Practice Again'
+                });
+            }
+            
+            if (recommendations.length === 0) {
+                recommendations.push({
+                    icon: '🎉',
+                    title: 'You\'re Doing Great!',
+                    description: 'Keep up the excellent work on your career journey',
+                    link: '/profile.html',
+                    linkText: 'View Dashboard'
+                });
+            }
+            
+            container.innerHTML = recommendations.map(rec => `
+                <div style="background: var(--gray-100); padding: 1.5rem; border-radius: var(--radius); display: flex; align-items: center; gap: 1.5rem;">
+                    <div style="font-size: 3rem; flex-shrink: 0;">${rec.icon}</div>
+                    <div style="flex: 1;">
+                        <h4 style="color: var(--gray-900); margin-bottom: 0.5rem;">${rec.title}</h4>
+                        <p style="color: var(--gray-600); margin-bottom: 0.5rem;">${rec.description}</p>
+                    </div>
+                    <a href="${rec.link}" class="btn btn-primary" style="flex-shrink: 0;">${rec.linkText}</a>
+                </div>
+            `).join('');
+        }
+
+        // Load on page load
+        loadProgress();
+    </script>
+</body>
+</html>

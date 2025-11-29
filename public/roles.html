@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Interview Role - CareerGenie</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none;">
+                    <span class="logo">✨ CareerGenie</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="/career.html">Career</a>
+                <a href="/resume-builder.html">Resume</a>
+                <a href="/roles.html" style="color: var(--primary);">Interview</a>
+                <a href="/progress.html">Progress</a>
+                <a href="/profile.html" class="btn btn-primary">My Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section style="background: var(--gradient); color: white; padding: 4rem 0 2rem; text-align: center;">
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">💡 AI Mock Interview Practice</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">Select a role to start your personalized interview practice</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section style="padding: 3rem 0;">
+        <div class="container">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                
+                <!-- Search Box -->
+                <div style="margin-bottom: 2rem;">
+                    <input type="text" id="searchBox" placeholder="🔍 Search for a role..." style="width: 100%; padding: 1rem; border: 2px solid var(--gray-300); border-radius: var(--radius); font-size: 1rem; font-family: inherit;">
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingRoles" style="text-align: center; padding: 3rem;">
+                    <div style="display: inline-block; width: 50px; height: 50px; border: 4px solid var(--gray-200); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 1rem; color: var(--gray-600);">Loading roles...</p>
+                </div>
+
+                <!-- Roles Grid -->
+                <div id="rolesGrid" style="display: none; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;"></div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot -->
+    <button class="chatbot-button" onclick="openChatbot()">
+        <span class="chatbot-icon">💬</span>
+    </button>
+
+    <div id="chatbotModal" class="chatbot-modal">
+        <div class="chatbot-container">
+            <div class="chatbot-header">
+                <h3>🤖 CareerGenie Assistant</h3>
+                <button onclick="closeChatbot()" class="close-btn">&times;</button>
+            </div>
+            <div id="chatMessages" class="chatbot-messages"></div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask about interviews..." onkeypress="handleChatKeyPress(event)">
+                <button onclick="sendMessage()" class="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        let allRoles = [];
+
+        // Check authentication
+        async function checkAuth() {
+            const response = await fetch('/api/auth/check');
+            const data = await response.json();
+            if (!data.authenticated) {
+                window.location.href = '/auth/login.html';
+            }
+        }
+        checkAuth();
+
+        // Role icons mapping
+        const roleIcons = {
+            'Frontend Developer': '💻',
+            'Backend Developer': '⚙️',
+            'Full Stack Developer': '🔧',
+            'Data Scientist': '📊',
+            'Machine Learning Engineer': '🤖',
+            'DevOps Engineer': '🚀',
+            'UI/UX Designer': '🎨',
+            'Product Manager': '📱',
+            'Business Analyst': '📈',
+            'Cloud Engineer': '☁️',
+            'Mobile Developer (Android)': '📱',
+            'Mobile Developer (iOS)': '🍎',
+            'QA Engineer': '✅',
+            'Cybersecurity Engineer': '🔒',
+            'Database Administrator': '🗄️',
+            'Software Architect': '🏗️',
+            'Game Developer': '🎮',
+            'Blockchain Developer': '⛓️',
+            'AI Engineer': '🧠',
+            'Digital Marketing Specialist': '📣',
+            'SEO Specialist': '🔍',
+            'Content Writer': '✍️',
+            'HR Manager': '👥',
+            'Financial Analyst': '💰',
+            'Sales Executive': '💼',
+            'Operations Manager': '⚡',
+            'Project Manager': '📋',
+            'Graphic Designer': '🖼️',
+            'Video Editor': '🎬',
+            'Systems Administrator': '💾'
+        };
+
+        // Load roles
+        async function loadRoles() {
+            try {
+                const response = await fetch('/api/interview/roles');
+                const data = await response.json();
+                
+                if (data.success) {
+                    allRoles = data.roles;
+                    displayRoles(allRoles);
+                }
+            } catch (error) {
+                console.error('Error loading roles:', error);
+                document.getElementById('loadingRoles').innerHTML = '<p style="color: var(--danger);">Failed to load roles. Please refresh the page.</p>';
+            }
+        }
+
+        function displayRoles(roles) {
+            document.getElementById('loadingRoles').style.display = 'none';
+            const grid = document.getElementById('rolesGrid');
+            grid.style.display = 'grid';
+            
+            grid.innerHTML = roles.map(role => {
+                const icon = roleIcons[role] || '💼';
+                return `
+                    <div class="role-card" onclick="selectRole('${role}')" style="
+                        background: white;
+                        padding: 2rem;
+                        border-radius: var(--radius-lg);
+                        box-shadow: var(--shadow);
+                        cursor: pointer;
+                        transition: var(--transition);
+                        border: 2px solid var(--gray-200);
+                        text-align: center;
+                    " onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='var(--shadow-xl)'; this.style.borderColor='var(--primary)';" onmouseout="this.style.transform=''; this.style.boxShadow='var(--shadow)'; this.style.borderColor='var(--gray-200)';">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">${icon}</div>
+                        <h3 style="color: var(--gray-900); font-size: 1.1rem; margin-bottom: 0.5rem;">${role}</h3>
+                        <p style="color: var(--gray-600); font-size: 0.9rem;">Click to start interview</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectRole(role) {
+            localStorage.setItem('selectedRole', role);
+            window.location.href = '/interview.html';
+        }
+
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredRoles = allRoles.filter(role => 
+                role.toLowerCase().includes(searchTerm)
+            );
+            displayRoles(filteredRoles);
+        });
+
+        // Load roles on page load
+        loadRoles();
+    </script>
+</body>
+</html>

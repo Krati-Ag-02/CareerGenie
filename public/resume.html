@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Hub - CareerGenie</title>
+    <link rel="stylesheet" href="/css/styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- General Layout and Content Consistency --- */
+        body { background-color: #f8fafc; font-family: 'Poppins', sans-serif; }
+        .resume-content { max-width: 1000px; margin: 50px auto; padding: 20px; }
+        .card { padding: 30px; border-radius: 8px; background: white; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); margin-bottom: 20px; }
+        
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .analysis-section { grid-column: 1 / -1; }
+        
+        /* File Upload */
+        .file-upload-box {
+            border: 2px dashed var(--border-color);
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .file-upload-box:hover {
+            border-color: var(--primary);
+        }
+        .file-upload-box i {
+            font-size: 2rem;
+            color: var(--text-muted);
+        }
+        #file-name-display {
+            font-weight: 500;
+            margin-top: 10px;
+            color: var(--success);
+        }
+        #analysis-results h4 {
+            color: var(--primary);
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+        }
+        .score-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+        .generate-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body class="auth-required">
+
+<nav class="navbar">
+    <a href="/" class="logo-container">
+        <i class="fa-solid fa-robot" style="font-size: 1.7rem; color: var(--primary-dark);"></i> 
+        <span>CareerGenie</span>
+    </a>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/career">Career Roadmap</a>
+        <a href="/resume" class="btn btn-primary">Resume Hub</a>
+        <a href="/interview">Interview Prep</a>
+        <a href="/profile" class="btn btn-outline">Profile</a>
+    </div>
+</nav>
+
+<main class="resume-content">
+    <h1 class="text-center">Resume Hub</h1>
+    <p class="text-center muted">Build, analyze, and perfect your professional documents.</p>
+
+    <div class="feature-grid">
+
+        <div class="card analysis-section">
+            <h2><i class="fa-solid fa-chart-simple"></i> Resume Analyzer</h2>
+            <p class="muted">Upload your existing resume (PDF, DOCX) to get an instant AI score and detailed feedback.</p>
+            <form id="analyze-form">
+                <input type="file" id="resume-file-input" name="resumeFile" accept=".pdf,.docx" required style="display: none;">
+                <div class="file-upload-box" id="file-drop-area">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Drag & drop your resume here, or click to upload.</p>
+                    <div id="file-name-display">No file selected.</div>
+                </div>
+                <div id="analysis-message" class="status-message mt-2" style="display: none; background-color: var(--secondary);"></div>
+                <button type="submit" class="btn btn-primary btn-block mt-3" id="analyze-btn" disabled>
+                    Analyze Resume <i class="fa-solid fa-vial"></i>
+                </button>
+            </form>
+            <div id="analysis-results">
+                </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-pen-to-square"></i> Resume Builder</h2>
+            <p class="muted">Create a professional resume from scratch using our guided step-by-step tool.</p>
+            <a href="/resume/builder" class="btn btn-secondary btn-block mt-3">
+                Launch Builder <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-bullseye"></i> JD Matcher (Coming Soon)</h2>
+            <p class="muted">Paste a job description and compare it against your resume to see keyword matches.</p>
+            <a href="#" class="btn btn-outline btn-block mt-3" disabled>
+                Match Resume <i class="fa-solid fa-magnifying-glass"></i>
+            </a>
+        </div>
+    </div>
+</main>
+
+<script src="/js/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fileInput = document.getElementById('resume-file-input');
+        const fileDropArea = document.getElementById('file-drop-area');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const analyzeForm = document.getElementById('analyze-form');
+        const messageDiv = document.getElementById('analysis-message');
+        const resultsDiv = document.getElementById('analysis-results');
+
+        // Helper to update file UI
+        function updateFileDisplay(file) {
+            if (file) {
+                fileNameDisplay.textContent = `File Selected: ${file.name}`;
+                fileNameDisplay.style.color = 'var(--success)';
+                analyzeBtn.disabled = false;
+            } else {
+                fileNameDisplay.textContent = 'No file selected.';
+                fileNameDisplay.style.color = 'var(--text-muted)';
+                analyzeBtn.disabled = true;
+            }
+        }
+
+        // --- File Selection Logic ---
+        fileDropArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', () => updateFileDisplay(fileInput.files[0]));
+
+        // Drag/Drop listeners
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileDropArea.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileDropArea.addEventListener(eventName, () => fileDropArea.style.borderColor = 'var(--secondary)', false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileDropArea.addEventListener(eventName, () => fileDropArea.style.borderColor = 'var(--border-color)', false);
+        });
+
+        fileDropArea.addEventListener('drop', e => {
+            const dt = e.dataTransfer;
+            const file = dt.files[0];
+            fileInput.files = dt.files;
+            updateFileDisplay(file);
+        }, false);
+        
+        // --- Feature Logic: Resume Analysis ---
+        analyzeForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...`;
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = 'var(--secondary)';
+            messageDiv.textContent = `Uploading and analyzing ${file.name}...`;
+            resultsDiv.innerHTML = '';
+
+            const formData = new FormData();
+            formData.append('resumeFile', file);
+            
+            try {
+                const res = await fetch('/api/resume/analyze', {
+                    method: 'POST',
+                    body: formData // Note: no Content-Type header when using FormData, browser handles it
+                });
+
+                const result = await res.json();
+                
+                if (res.ok && result.success) {
+                    messageDiv.textContent = `✅ Analysis Complete! Score:`;
+                    messageDiv.style.backgroundColor = 'var(--success)';
+                    
+                    resultsDiv.innerHTML = `
+                        <div class="score-display">${result.score || 'N/A'}%</div>
+                        <h4>Detailed Feedback:</h4>
+                        <p><strong>Summary:</strong> ${result.feedback || 'The AI found no major issues.'}</p>
+                        ${result.improvements ? `
+                        <h5>Suggested Improvements:</h5>
+                        <ul>${result.improvements.map(i => `<li>${i}</li>`).join('')}</ul>
+                        ` : ''}
+                    `;
+                } else {
+                    messageDiv.textContent = result.error || '❌ Analysis failed. Ensure the file is a valid PDF or DOCX.';
+                    messageDiv.style.backgroundColor = 'var(--danger)';
+                    resultsDiv.innerHTML = '<p class="muted">Could not generate detailed results.</p>';
+                }
+
+            } catch (err) {
+                console.error("Analysis Error:", err);
+                messageDiv.textContent = '❌ A network or server error occurred during analysis.';
+                messageDiv.style.backgroundColor = 'var(--danger)';
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = 'Analyze Resume <i class="fa-solid fa-vial"></i>';
+                setTimeout(() => messageDiv.style.display = 'none', 5000);
+            }
+        });
+    });
+</script>
+</body>
+</html>

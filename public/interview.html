@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Interview - CareerGenie</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none;">
+                    <span class="logo">✨ CareerGenie</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="/interview.html">← Back to Interview Hub</a>
+                <a href="/profile.html" class="btn btn-primary">My Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section style="padding: 2rem 0; min-height: 90vh; background: var(--gray-100);">
+        <div class="container">
+            <div style="max-width: 900px; margin: 0 auto;">
+                
+                <!-- Header -->
+                <div id="interviewHeader" style="background: white; padding: 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h2 id="roleTitle" style="color: var(--gray-900); margin-bottom: 0.5rem;">Loading Interview...</h2>
+                            <p style="color: var(--gray-600);">Question <span id="currentQ">0</span> of <span id="totalQ">0</span></p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.9rem; color: var(--gray-600);">Your Score</div>
+                            <div id="currentScore" style="font-size: 2rem; font-weight: 700; color: var(--primary);">0</div>
+                        </div>
+                    </div>
+                    <div style="background: var(--gray-200); height: 8px; border-radius: 10px; margin-top: 1rem; overflow: hidden;">
+                        <div id="progressBar" style="background: var(--gradient); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+
+                <!-- Loading Questions -->
+                <div id="loadingQuestions" style="background: white; padding: 3rem; border-radius: var(--radius-lg); box-shadow: var(--shadow); text-align: center;">
+                    <div style="display: inline-block; width: 50px; height: 50px; border: 4px solid var(--gray-200); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <h3 style="margin-top: 1.5rem; color: var(--gray-700);">Generating Interview Questions...</h3>
+                    <p style="color: var(--gray-500);">Our AI is preparing personalized questions for this role</p>
+                </div>
+
+                <!-- Question Card -->
+                <div id="questionCard" style="display: none; background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);">
+                    <div style="display: inline-block; background: var(--primary); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; margin-bottom: 1rem;" id="questionType">Question</div>
+                    
+                    <div style="display: inline-block; background: var(--secondary); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; margin-bottom: 1rem; margin-left: 0.5rem;" id="questionDifficulty">Medium</div>
+                    
+                    <h3 id="questionText" style="color: var(--gray-900); font-size: 1.4rem; line-height: 1.6; margin-bottom: 2rem;"></h3>
+                    
+                    <!-- Sample Answer Toggle -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <button onclick="toggleSampleAnswer()" style="background: var(--gray-200); color: var(--gray-700); border: none; padding: 0.5rem 1rem; border-radius: var(--radius); cursor: pointer;">
+                            💡 Show Sample Answer
+                        </button>
+                        <div id="sampleAnswerDiv" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--gray-100); border-radius: var(--radius); border-left: 4px solid var(--secondary);">
+                            <strong style="color: var(--secondary);">Sample Answer:</strong>
+                            <p id="sampleAnswerText" style="margin-top: 0.5rem; color: var(--gray-700);"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: var(--gray-700);">Your Answer</label>
+                        <textarea id="answerInput" rows="8" placeholder="Type your answer here... Be specific and use examples." style="width: 100%; padding: 1rem; border: 2px solid var(--gray-300); border-radius: var(--radius); font-family: inherit; font-size: 1rem; resize: vertical;"></textarea>
+                        <small style="color: var(--gray-500);">Take your time and provide a detailed answer</small>
+                    </div>
+                    
+                    <button id="submitAnswerBtn" onclick="submitAnswer()" class="btn btn-primary btn-large" style="width: 100%; margin-top: 1rem;">
+                        Submit Answer & Get Feedback
+                    </button>
+                </div>
+
+                <!-- Evaluation Card -->
+                <div id="evaluationCard" style="display: none; background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);">
+                    <h3 style="color: var(--secondary); margin-bottom: 1.5rem;">✓ Answer Evaluated!</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        <div style="background: var(--gray-100); padding: 1rem; border-radius: var(--radius); text-align: center;">
+                            <div style="font-size: 0.9rem; color: var(--gray-600);">Communication</div>
+                            <div id="scoreCommunication" style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">-</div>
+                        </div>
+                        <div style="background: var(--gray-100); padding: 1rem; border-radius: var(--radius); text-align: center;">
+                            <div style="font-size: 0.9rem; color: var(--gray-600);">Technical</div>
+                            <div id="scoreTechnical" style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">-</div>
+                        </div>
+                        <div style="background: var(--gray-100); padding: 1rem; border-radius: var(--radius); text-align: center;">
+                            <div style="font-size: 0.9rem; color: var(--gray-600);">Clarity</div>
+                            <div id="scoreClarity" style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">-</div>
+                        </div>
+                        <div style="background: var(--gray-100); padding: 1rem; border-radius: var(--radius); text-align: center;">
+                            <div style="font-size: 0.9rem; color: var(--gray-600);">Confidence</div>
+                            <div id="scoreConfidence" style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">-</div>
+                        </div>
+                        <div style="background: var(--gray-100); padding: 1rem; border-radius: var(--radius); text-align: center;">
+                            <div style="font-size: 0.9rem; color: var(--gray-600);">Correctness</div>
+                            <div id="scoreCorrectness" style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">-</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--gray-100); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--gray-900); margin-bottom: 0.75rem;">💡 Feedback</h4>
+                        <p id="feedbackText" style="color: var(--gray-700); line-height: 1.6;"></p>
+                    </div>
+                    
+                    <div style="background: var(--info); background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem; border-left: 4px solid var(--info);">
+                        <h4 style="color: var(--gray-900); margin-bottom: 0.75rem;">📈 Suggestions for Improvement</h4>
+                        <ul id="suggestionsList" style="color: var(--gray-700); line-height: 1.8;"></ul>
+                    </div>
+                    
+                    <div style="background: var(--secondary); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1.5rem; border-left: 4px solid var(--secondary);">
+                        <h4 style="color: var(--gray-900); margin-bottom: 0.75rem;">✨ What You Did Well</h4>
+                        <ul id="strengthsList" style="color: var(--gray-700); line-height: 1.8;"></ul>
+                    </div>
+                    
+                    <button onclick="nextQuestion()" class="btn btn-primary btn-large" style="width: 100%;">
+                        Next Question →
+                    </button>
+                </div>
+
+                <!-- Final Results -->
+                <div id="finalResults" style="display: none; background: white; padding: 3rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+                    <h2 style="color: var(--gray-900); margin-bottom: 1rem;">Interview Complete!</h2>
+                    <p style="color: var(--gray-600); margin-bottom: 2rem;">Congratulations on completing the mock interview</p>
+                    
+                    <div style="background: var(--gradient); color: white; padding: 2rem; border-radius: var(--radius-lg); margin-bottom: 2rem;">
+                        <div style="font-size: 1rem; opacity: 0.9; margin-bottom: 0.5rem;">Your Final Score</div>
+                        <div id="finalScore" style="font-size: 4rem; font-weight: 700;">0</div>
+                        <div style="font-size: 1rem; opacity: 0.9;">out of 100</div>
+                    </div>
+                    
+                    <div id="finalFeedback" style="text-align: left; background: var(--gray-100); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 2rem;"></div>
+                    
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                        <a href="/interview-home.html" class="btn btn-secondary">Try Another Role</a>
+                        <a href="/progress.html" class="btn btn-primary">View Your Progress</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let selectedRole = '';
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+        let answers = [];
+
+        // Check authentication
+        async function checkAuth() {
+            const response = await fetch('/api/auth/check');
+            const data = await response.json();
+            if (!data.authenticated) {
+                window.location.href = '/auth/login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Initialize interview
+        async function initialize() {
+            if (!await checkAuth()) return;
+            
+            selectedRole = localStorage.getItem('selectedRole');
+            if (!selectedRole) {
+                alert('Please select a role first');
+                window.location.href = '/interview-home.html';
+                return;
+            }
+            
+            document.getElementById('roleTitle').textContent = selectedRole + ' Interview';
+            
+            try {
+                const response = await fetch('/api/interview/questions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role: selectedRole })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    questions = Array.isArray(data.questions) ? data.questions : [];
+                    
+                    if (questions.length === 0) {
+                        alert('Failed to generate questions. Please try again.');
+                        window.location.href = '/interview-home.html';
+                        return;
+                    }
+                    
+                    document.getElementById('totalQ').textContent = questions.length;
+                    console.log('Loaded', questions.length, 'questions');
+                    showQuestion();
+                } else {
+                    throw new Error('Failed to load questions');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to load interview questions. Please try again.');
+                window.location.href = '/interview-home.html';
+            }
+        }
+
+        function showQuestion() {
+            document.getElementById('loadingQuestions').style.display = 'none';
+            document.getElementById('questionCard').style.display = 'block';
+            document.getElementById('evaluationCard').style.display = 'none';
+            
+            const question = questions[currentQuestionIndex];
+            document.getElementById('currentQ').textContent = currentQuestionIndex + 1;
+            document.getElementById('questionType').textContent = (question.type || 'Question').toUpperCase();
+            document.getElementById('questionDifficulty').textContent = (question.difficulty || 'Medium').toUpperCase();
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('sampleAnswerText').textContent = question.sampleAnswer || 'No sample answer available';
+            document.getElementById('answerInput').value = '';
+            document.getElementById('sampleAnswerDiv').style.display = 'none';
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function toggleSampleAnswer() {
+            const div = document.getElementById('sampleAnswerDiv');
+            div.style.display = div.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitAnswer() {
+            const answer = document.getElementById('answerInput').value.trim();
+            
+            if (!answer) {
+                alert('Please provide an answer before submitting');
+                return;
+            }
+            
+            const btn = document.getElementById('submitAnswerBtn');
+            btn.textContent = 'Evaluating your answer...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/interview/evaluate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        question: questions[currentQuestionIndex].question,
+                        answer: answer,
+                        role: selectedRole
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showEvaluation(data.evaluation, answer);
+                } else {
+                    throw new Error('Evaluation failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                // Show default evaluation on error
+                showEvaluation({
+                    communication: 7, technical: 7, clarity: 7, confidence: 7, correctness: 7,
+                    feedback: 'Your answer has been recorded. Keep practicing!',
+                    suggestions: ['Keep practicing', 'Be more specific'],
+                    strengths: ['Good effort', 'Completed the answer']
+                }, answer);
+            }
+            
+            btn.textContent = 'Submit Answer & Get Feedback';
+            btn.disabled = false;
+        }
+
+        function showEvaluation(evaluation, answer) {
+            document.getElementById('questionCard').style.display = 'none';
+            document.getElementById('evaluationCard').style.display = 'block';
+            
+            // Display scores
+            document.getElementById('scoreCommunication').textContent = (evaluation.communication || 7) + '/10';
+            document.getElementById('scoreTechnical').textContent = (evaluation.technical || 7) + '/10';
+            document.getElementById('scoreClarity').textContent = (evaluation.clarity || 7) + '/10';
+            document.getElementById('scoreConfidence').textContent = (evaluation.confidence || 7) + '/10';
+            document.getElementById('scoreCorrectness').textContent = (evaluation.correctness || 7) + '/10';
+            
+            // Display feedback
+            document.getElementById('feedbackText').textContent = evaluation.feedback || 'Good answer!';
+            
+            // Display suggestions
+            const suggestions = Array.isArray(evaluation.suggestions) ? evaluation.suggestions : ['Keep practicing'];
+            document.getElementById('suggestionsList').innerHTML = suggestions.map(s => `<li>${s}</li>`).join('');
+            
+            // Display strengths
+            const strengths = Array.isArray(evaluation.strengths) ? evaluation.strengths : ['Good effort'];
+            document.getElementById('strengthsList').innerHTML = strengths.map(s => `<li>${s}</li>`).join('');
+            
+            // Calculate score
+            const questionScore = ((evaluation.communication || 7) + (evaluation.technical || 7) + 
+                                  (evaluation.clarity || 7) + (evaluation.confidence || 7) + 
+                                  (evaluation.correctness || 7)) * 2;
+            totalScore += questionScore;
+            
+            // Update current score display
+            const avgScore = Math.round(totalScore / (currentQuestionIndex + 1));
+            document.getElementById('currentScore').textContent = avgScore;
+            
+            // Save answer
+            answers.push({
+                question: questions[currentQuestionIndex].question,
+                answer: answer,
+                evaluation: evaluation
+            });
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showFinalResults();
+            }
+        }
+
+        async function showFinalResults() {
+            document.getElementById('interviewHeader').style.display = 'none';
+            document.getElementById('evaluationCard').style.display = 'none';
+            document.getElementById('finalResults').style.display = 'block';
+            
+            const finalAvgScore = Math.round(totalScore / questions.length);
+            document.getElementById('finalScore').textContent = finalAvgScore;
+            
+            let performance = '';
+            if (finalAvgScore >= 80) performance = '🌟 Excellent! You\'re well-prepared for interviews.';
+            else if (finalAvgScore >= 70) performance = '👍 Good job! Keep practicing to improve further.';
+            else if (finalAvgScore >= 60) performance = '📚 Decent performance. More practice will help you excel.';
+            else performance = '💪 Keep practicing! You\'ll improve with more preparation.';
+            
+            document.getElementById('finalFeedback').innerHTML = `
+                <h4 style="margin-bottom: 1rem; color: var(--gray-900);">Performance Summary</h4>
+                <p style="color: var(--gray-700); margin-bottom: 1rem; font-size: 1.1rem;">${performance}</p>
+                <p style="color: var(--gray-600);">You completed ${questions.length} questions with an average score of ${finalAvgScore}/100.</p>
+                <p style="color: var(--gray-600); margin-top: 1rem;">Great work on completing this mock interview. Review your answers and keep practicing!</p>
+            `;
+            
+            // Save interview session
+            try {
+                await fetch('/api/interview/save-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        role: selectedRole,
+                        questions: questions,
+                        answers: answers,
+                        totalScore: finalAvgScore,
+                        feedback: performance
+                    })
+                });
+                console.log('Interview session saved');
+            } catch (error) {
+                console.error('Error saving session:', error);
+            }
+        }
+
+        // Initialize on page load
+        initialize();
+    </script>
+</body>
+</html>

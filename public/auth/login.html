@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CareerGenie</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="form-container" style="margin: 2rem;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h1 style="font-size: 2rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">✨ CareerGenie</h1>
+            <h2 style="margin-top: 1rem;">Welcome Back!</h2>
+            <p style="color: var(--gray-600);">Login to continue your career journey</p>
+        </div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <span id="loginBtnText">Login</span>
+            </button>
+        </form>
+        <p style="text-align: center; margin-top: 1.5rem; color: var(--gray-600);">
+            Don't have an account? <a href="/auth/register.html" style="color: var(--primary); font-weight: 600;">Register here</a>
+        </p>
+        <p style="text-align: center; margin-top: 0.5rem;">
+            <a href="/" style="color: var(--gray-600); font-size: 0.9rem;">← Back to Home</a>
+        </p>
+        <div id="message" style="margin-top: 1rem; text-align: center;"></div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            const btnText = document.getElementById('loginBtnText');
+
+            // Show loading
+            btnText.textContent = 'Logging in...';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageDiv.innerHTML = '<p style="color: var(--secondary); font-weight: 600;">✓ Login successful! Redirecting...</p>';
+                    setTimeout(() => {
+                        window.location.href = '/'; // Redirect to home page
+                    }, 1000);
+                } else {
+                    messageDiv.innerHTML = `<p style="color: var(--danger); font-weight: 500;">${data.error}</p>`;
+                    btnText.textContent = 'Login';
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<p style="color: var(--danger); font-weight: 500;">Login failed. Please try again.</p>';
+                btnText.textContent = 'Login';
+            }
+        });
+    </script>
+</body>
+</html>

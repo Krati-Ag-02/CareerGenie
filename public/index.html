@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerGenie - AI-Powered Career Development Platform</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none;">
+                    <span class="logo">✨ CareerGenie</span>
+                </a>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <!-- Will be populated by JavaScript based on auth state -->
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="/auth/login.html" class="btn btn-primary">Login / Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        Your AI-Powered<br>
+                        <span class="gradient-text">Career Success Partner</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Transform your career journey with AI-driven recommendations, 
+                        professional resume building, and personalized interview preparation
+                    </p>
+                    <div class="hero-buttons" id="heroButtons">
+                        <a href="/auth/register.html" class="btn btn-large btn-primary">
+                            Get Started Free
+                        </a>
+                        <a href="#features" class="btn btn-large btn-secondary">
+                            Learn More
+                        </a>
+                    </div>
+                    <!-- <div class="hero-stats">
+                        <div class="stat">
+                            <h3>10K+</h3>
+                            <p>Career Paths</p>
+                        </div>
+                        <div class="stat">
+                            <h3>500+</h3>
+                            <p>Mock Interviews</p>
+                        </div>
+                        <div class="stat">
+                            <h3>9+</h3>
+                            <p>Resume Templates</p>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="hero-image">
+                    <div class="floating-card card-1">
+                        <span class="icon">💼</span>
+                        <p>AI Career Match</p>
+                    </div>
+                    <div class="floating-card card-2">
+                        <span class="icon">📄</span>
+                        <p>Smart Resume</p>
+                    </div>
+                    <div class="floating-card card-3">
+                        <span class="icon">🎯</span>
+                        <p>Interview Prep</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powerful Features to Accelerate Your Career</h2>
+                <p>Everything you need to land your dream job, powered by AI</p>
+            </div>
+            <div class="feature-grid">
+                <!-- Career Recommendation -->
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>AI Career Recommendations</h3>
+                    <p>Get personalized career matches based on your skills, interests, and goals. Our AI analyzes thousands of career paths to find your perfect fit.</p>
+                    <ul class="feature-list">
+                        <li>✓ Top 5 career matches with scores</li>
+                        <li>✓ Detailed skill roadmaps</li>
+                        <li>✓ Salary insights & future scope</li>
+                        <li>✓ Required tools & technologies</li>
+                    </ul>
+                    <a href="/career.html" class="feature-link">Explore Careers →</a>
+                </div>
+
+                <!-- Resume Hub -->
+                <div class="feature-card ">
+                    <!-- <div class="badge">Most Popular</div> -->
+                    <div class="feature-icon">📄</div>
+                    <h3>Professional Resume Builder</h3>
+                    <p>Create stunning, ATS-optimized resumes with our intelligent builder. Choose from 9+ professional templates.</p>
+                    <ul class="feature-list">
+                        <!-- <li>✓ 9+ professional templates</li> -->
+                        <li>✓ Live preview & editing</li>
+                        <li>✓ ATS score analyzer</li>
+                        <li>✓ Export to high-quality PDF</li>
+                    </ul>
+                    <a href="/resume-builder.html" class="feature-link">Build Resume →</a>
+                </div>
+
+                <!-- Interview Prep -->
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>AI Mock Interviews</h3>
+                    <p>Practice with AI-powered mock interviews for 30+ roles. Get instant feedback and improve your interview skills.</p>
+                    <ul class="feature-list">
+                        <!-- <li>✓ 30+ role-specific interviews</li> -->
+                        <li>✓ Real-time AI evaluation</li>
+                        <li>✓ Detailed feedback & scoring</li>
+                        <li>✓ Track your progress</li>
+                    </ul>
+                    <a href="/roles.html" class="feature-link">Start Practice →</a>
+                </div>
+
+                <!-- Progress Tracker -->
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Progress Tracking</h3>
+                    <p>Monitor your career development journey with detailed analytics and achievements.</p>
+                    <ul class="feature-list">
+                        <li>✓ Interview completion tracking</li>
+                        <li>✓ Resume improvement metrics</li>
+                        <li>✓ Skill development badges</li>
+                        <li>✓ Personalized insights</li>
+                    </ul>
+                    <a href="/progress.html" class="feature-link">View Progress →</a>
+                </div>
+
+                <!-- AI Chatbot -->
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>24/7 AI Career Assistant</h3>
+                    <p>Get instant answers to your career questions with our intelligent chatbot assistant.</p>
+                    <ul class="feature-list">
+                        <li>✓ Personalized career guidance</li>
+                        <li>✓ Resume improvement tips</li>
+                        <li>✓ Interview preparation help</li>
+                        <li>✓ Context-aware responses</li>
+                    </ul>
+                    <a href="#" class="feature-link" onclick="openChatbot()">Chat Now →</a>
+                </div>
+
+                <!-- ATS Analyzer -->
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>ATS Resume Analyzer</h3>
+                    <p>Analyze your resume's ATS compatibility and get actionable improvement suggestions.</p>
+                    <ul class="feature-list">
+                        <li>✓ ATS score (0-100)</li>
+                        <li>✓ Keyword optimization</li>
+                        <li>✓ Formatting analysis</li>
+                        <li>✓ Improvement recommendations</li>
+                    </ul>
+                    <a href="/resume-builder.html#analyzer" class="feature-link">Analyze Resume →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How CareerGenie Works</h2>
+                <p>Your journey to career success in 4 simple steps</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Create Your Profile</h3>
+                    <p>Sign up and tell us about your skills, education, and career goals</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Get AI Recommendations</h3>
+                    <p>Receive personalized career matches and detailed roadmaps</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Build Your Resume</h3>
+                    <p>Create a professional, ATS-optimized resume with our templates</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Practice & Excel</h3>
+                    <p>Master interviews with AI-powered mock sessions and feedback</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <!-- <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Career?</h2>
+                <p>Join thousands of professionals who have found their dream careers with CareerGenie</p>
+                <div id="ctaButton">
+                    <a href="/auth/register.html" class="btn btn-large btn-white">Get Started Now - It's Free!</a>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 CareerGenie. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Chatbot Button -->
+    <button class="chatbot-button" onclick="openChatbot()" aria-label="Open chatbot">
+        <span class="chatbot-icon">💬</span>
+    </button>
+
+    <!-- Chatbot Modal -->
+    <div id="chatbotModal" class="chatbot-modal">
+        <div class="chatbot-container">
+            <div class="chatbot-header">
+                <h3>🤖 CareerGenie Assistant</h3>
+                <button onclick="closeChatbot()" class="close-btn">&times;</button>
+            </div>
+            <div id="chatMessages" class="chatbot-messages"></div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask me anything about your career..." onkeypress="handleChatKeyPress(event)">
+                <button onclick="sendMessage()" class="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        // Check authentication status and update UI
+        async function updateNavigation() {
+            try {
+                const response = await fetch('/api/auth/check');
+                const data = await response.json();
+                
+                const navLinks = document.getElementById('navLinks');
+                const heroButtons = document.getElementById('heroButtons');
+                const ctaButton = document.getElementById('ctaButton');
+                
+                if (data.authenticated) {
+                    // User is logged in - show dashboard links
+                    navLinks.innerHTML = `
+                        <a href="/career.html">Career</a>
+                        <a href="/resume-builder.html">Resume</a>
+                        <a href="/roles.html">Interview</a>
+                        <a href="/progress.html">Progress</a>
+                        <a href="/profile.html" class="btn btn-primary">My Dashboard</a>
+                    `;
+                    
+                    // Update hero buttons for logged-in users
+                    heroButtons.innerHTML = `
+                        <a href="/profile.html" class="btn btn-large btn-primary">
+                            Go to Dashboard
+                        </a>
+                       
+                    `;
+                    
+                    // Update CTA button
+                    // ctaButton.innerHTML = `
+                    //     <a href="/profile.html" class="btn btn-large btn-white">Go to Dashboard</a>
+                    // `;
+                } else {
+                    // User is not logged in - show default (already in HTML)
+                    navLinks.innerHTML = `
+                        <a href="#features">Features</a>
+                        <a href="#how-it-works">How It Works</a>
+                        <a href="/auth/login.html" class="btn btn-primary">Login / Register</a>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error checking auth:', error);
+            }
+        }
+        
+        // Run on page load
+        updateNavigation();
+    </script>
+</body>
+</html>

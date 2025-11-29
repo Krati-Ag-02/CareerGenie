@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Recommendations - CareerGenie</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none;">
+                    <span class="logo">✨ CareerGenie</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="/career.html" style="color: var(--primary);">Career</a>
+                <a href="/resume-builder.html">Resume</a>
+                <a href="/roles.html">Interview</a>
+                <a href="/progress.html">Progress</a>
+                <a href="/profile.html" class="btn btn-primary">My Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section style="background: var(--gradient); color: white; padding: 4rem 0 2rem; text-align: center;">
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">🎯 AI Career Recommendations</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">Discover your perfect career path with AI-powered insights</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section style="padding: 3rem 0; min-height: 70vh;">
+        <div class="container">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                
+                <!-- Input Form -->
+                <div id="inputSection" style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); margin-bottom: 2rem;">
+                    <h2 style="margin-bottom: 1.5rem; text-align: center;">Tell Us About Yourself</h2>
+                    <form id="careerForm">
+                        <div class="form-group">
+                            <label>Your Skills (comma separated)</label>
+                            <input type="text" id="skills" required placeholder="e.g., JavaScript, Python, Communication, Leadership">
+                            <small style="color: var(--gray-500);">Enter your technical and soft skills</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Your Degree/Education</label>
+                            <input type="text" id="degree" required placeholder="e.g., B.Tech in Computer Science, MBA, B.Com">
+                        </div>
+                        <div class="form-group">
+                            <label>Your Interests & Career Goals</label>
+                            <textarea id="interests" required rows="4" placeholder="e.g., I'm interested in web development, building user-friendly applications, and working in a collaborative environment..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">
+                            <span id="submitBtnText">Get AI Recommendations 🚀</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingSection" style="display: none; text-align: center; padding: 3rem;">
+                    <div style="display: inline-block; width: 60px; height: 60px; border: 5px solid var(--gray-200); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <h3 style="margin-top: 1.5rem; color: var(--gray-700);">Analyzing your profile...</h3>
+                    <p style="color: var(--gray-500);">Our AI is finding the best career matches for you</p>
+                </div>
+
+                <!-- Results Section -->
+                <div id="resultsSection" style="display: none;">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h2 style="color: var(--gray-900);">Your Top Career Matches 🎉</h2>
+                        <p style="color: var(--gray-600);">Here are careers tailored to your profile</p>
+                    </div>
+                    <div id="recommendations"></div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button onclick="resetForm()" class="btn btn-secondary">Get New Recommendations</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot -->
+    <button class="chatbot-button" onclick="openChatbot()">
+        <span class="chatbot-icon">💬</span>
+    </button>
+
+    <div id="chatbotModal" class="chatbot-modal">
+        <div class="chatbot-container">
+            <div class="chatbot-header">
+                <h3>🤖 CareerGenie Assistant</h3>
+                <button onclick="closeChatbot()" class="close-btn">&times;</button>
+            </div>
+            <div id="chatMessages" class="chatbot-messages"></div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask about careers..." onkeypress="handleChatKeyPress(event)">
+                <button onclick="sendMessage()" class="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        // Check authentication
+        async function checkAuth() {
+            const response = await fetch('/api/auth/check');
+            const data = await response.json();
+            if (!data.authenticated) {
+                window.location.href = '/auth/login.html';
+            }
+        }
+        checkAuth();
+
+        // Handle form submission
+        document.getElementById('careerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const skills = document.getElementById('skills').value.trim();
+            const degree = document.getElementById('degree').value.trim();
+            const interests = document.getElementById('interests').value.trim();
+            
+            // Show loading
+            document.getElementById('inputSection').style.display = 'none';
+            document.getElementById('loadingSection').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/career/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ skills, degree, interests })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayRecommendations(data.recommendations);
+                } else {
+                    alert('Failed to get recommendations: ' + data.error);
+                    resetForm();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to get recommendations. Please try again.');
+                resetForm();
+            }
+        });
+
+        function displayRecommendations(recommendations) {
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'block';
+            
+            const container = document.getElementById('recommendations');
+            
+     
+            let careers;
+            try {
+                careers = typeof recommendations === 'string' ? JSON.parse(recommendations) : recommendations;
+            } catch (e) {
+                // If parsing fails, create a simple display
+                container.innerHTML = `
+                    <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow);">
+                        <pre style="white-space: pre-wrap; font-family: inherit;">${recommendations}</pre>
+                    </div>
+                `;
+                return;
+            }
+            
+            
+            container.innerHTML = careers.map((career, index) => `
+                <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow); margin-bottom: 1.5rem; border-left: 4px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <h3 style="color: var(--gray-900); font-size: 1.5rem;">${index + 1}. ${career.title || career.career || 'Career Option'}</h3>
+                        <div style="background: var(--gradient); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600;">
+                            ${career.matchScore || career.score || 'N/A'}% Match
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">💡 Why This Fits You</h4>
+                        <p style="color: var(--gray-700); line-height: 1.6;">${career.whyItFits || career.fit || career.description || 'Great match for your profile'}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">🎯 Required Skills</h4>
+                        <p style="color: var(--gray-700);">${Array.isArray(career.requiredSkills) ? career.requiredSkills.join(', ') : career.requiredSkills || career.skills || 'Various skills required'}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">🛤️ Skill Roadmap</h4>
+                        <p style="color: var(--gray-700); white-space: pre-line;">${career.skillRoadmap || career.roadmap || 'Build skills progressively'}</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                        <div style="background: var(--gray-100); padding: 1rem; border-radius: var(--radius);">
+                            <strong style="color: var(--gray-700);">💰 Salary Range</strong>
+                            <p style="margin-top: 0.5rem; color: var(--gray-900); font-weight: 600;">${career.salaryRange || career.salary || 'Competitive'}</p>
+                        </div>
+                        <div style="background: var(--gray-100); padding: 1rem; border-radius: var(--radius);">
+                            <strong style="color: var(--gray-700);">🚀 Future Scope</strong>
+                            <p style="margin-top: 0.5rem; color: var(--gray-900);">${career.futureScope || career.future || 'Excellent growth'}</p>
+                        </div>
+                    </div>
+                    
+                    ${career.tools ? `
+                    <div style="margin-top: 1rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">🛠️ Tools & Technologies</h4>
+                        <p style="color: var(--gray-700);">${Array.isArray(career.tools) ? career.tools.join(', ') : career.tools}</p>
+                    </div>
+                    ` : ''}
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <a href="/roles.html" class="btn btn-primary">Practice Interview for This Role</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function resetForm() {
+            document.getElementById('inputSection').style.display = 'block';
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('careerForm').reset();
+        }
+    </script>
+</body>
+</html>
