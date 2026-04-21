@@ -1,6 +1,5 @@
 import admin from "firebase-admin";
-import fs from "fs";
-import path from "path";
+import 'dotenv/config';
 
 let db;
 
@@ -9,24 +8,19 @@ function initializeFirebase() {
     return admin.firestore();
   }
 
-  // 🔥 ALWAYS use JSON file (NO fallback)
-  const filePath = path.resolve("./config/serviceAccountKey.json");
-
-  if (!fs.existsSync(filePath)) {
-    throw new Error("❌ serviceAccountKey.json NOT found in /config folder");
-  }
-
-  const serviceAccount = JSON.parse(
-    fs.readFileSync(filePath, "utf-8")
-  );
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
 
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: privateKey,
+    }),
   });
 
   db = admin.firestore();
 
-  console.log("✅ Firebase connected (FINAL)");
+  console.log("✅ Firebase connected (ENV)");
 
   return db;
 }
