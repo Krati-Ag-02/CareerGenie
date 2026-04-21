@@ -72,7 +72,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`\n🚀 CareerGenie Backend → http://localhost:${PORT}`);
-  console.log(`🌍 Accepting requests from: ${process.env.CLIENT_URL || 'http://localhost:5173'}\n`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Backend running on port ${PORT}`);
+   console.log(`🌍 Accepting requests from: ${process.env.CLIENT_URL || 'http://localhost:5173'}\n`);
 });
