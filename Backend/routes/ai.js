@@ -112,7 +112,7 @@ Scoring guide: 90-100 = excellent, 75-89 = good, 60-74 = average, 40-59 = below 
     // Persist to Firestore
     const db = getDb();
     await db.collection('interview_sessions').add({
-      userId: req.session.userId,
+        userId: req.session?.userId || "anonymous",
       role, question, answer, evaluation,
       timestamp: new Date().toISOString(),
     });
@@ -195,7 +195,7 @@ Analyze this resume comprehensively and return ONLY a raw JSON object (no markdo
     // Save to Firestore
     const db = getDb();
     await db.collection('resume_analyses').add({
-      userId: req.session.userId,
+       userId: req.session?.userId || "anonymous",
       targetRole: targetRole || 'General',
       resumeSnippet: resumeText.substring(0, 200),
       analysis,
@@ -271,7 +271,7 @@ Provide exactly 5 recommended roles. Be specific with salary figures (use real m
     // Save to Firestore
     const db = getDb();
     await db.collection('career_guidance').add({
-      userId: req.session.userId,
+        userId: req.session?.userId || "anonymous",
       input: { skills, education, interests, experience },
       guidance,
       timestamp: new Date().toISOString(),
