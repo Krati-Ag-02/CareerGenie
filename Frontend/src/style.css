@@ -1,0 +1,88 @@
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #020617, #0f172a);
+  color: white;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 40px;
+  background: rgba(2, 6, 23, 0.9);
+  border-bottom: 1px solid #1e293b;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.hero-btn {
+  font-size: 16px;
+}
+
+/* SECTION */
+.section-title {
+  margin-bottom: 20px;
+}
+
+/* LAYOUT */
+.container {
+  padding: 40px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: #020617;
+  padding: 25px;
+  border-radius: 14px;
+  border: 1px solid #1e293b;
+  transition: 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: #3b82f6;
+  box-shadow: 0 10px 30px rgba(59,130,246,0.2);
+}
+
+/* BUTTON */
+.btn {
+  padding: 12px 18px;
+  background: #3b82f6;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

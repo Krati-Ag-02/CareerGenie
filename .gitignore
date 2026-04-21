@@ -1,0 +1,11 @@
+# Root level
+node_modules/
+
+# Backend secrets
+backend/.env
+backend/config/serviceAccountKey.json
+backend/node_modules/
+
+# Frontend secrets
+frontend/.env
+frontend/node_modules/
