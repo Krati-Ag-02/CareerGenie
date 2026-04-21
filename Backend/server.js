@@ -1,5 +1,10 @@
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
+process.env.NODE_OPTIONS = '--openssl-legacy-provider';
 import express from "express";
 import cors from "cors";
+
 import session from "express-session";
 import dotenv from "dotenv";
 
