@@ -20,7 +20,7 @@ const ROLES = [
 ];
 
 // ─── GET ROLES ────────────────────────────────────────────────────────────────
-router.get('/interview/roles', requireAuth, (req, res) => {
+router.get('/interview/roles', (req, res) => {
   res.json({ roles: ROLES });
 });
 
