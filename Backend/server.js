@@ -20,6 +20,7 @@ initializeFirebase();
 // CORS
 app.use(cors({
   origin: "https://careergenie-frontend.onrender.com",
+  
   credentials: true
 }));
 
