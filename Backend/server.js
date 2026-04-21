@@ -12,7 +12,6 @@ import aiRoutes from "./routes/ai.js";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 🔥 VERY IMPORTANT FOR RENDER (fixes cookies)
 app.set("trust proxy", 1);
 
 // Initialize Firebase
@@ -39,9 +38,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true,          // REQUIRED for Render (HTTPS)
+    secure: true,          
     httpOnly: true,
-    sameSite: "none",      // REQUIRED for frontend-backend different domain
+    sameSite: "none",      
     maxAge: 7 * 24 * 60 * 60 * 1000
   }
 }));

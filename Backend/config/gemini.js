@@ -1,9 +1,6 @@
 import https from 'https';
 import 'dotenv/config';
 
-// ─────────────────────────────────────────────
-// Helper: HTTPS POST
-// ─────────────────────────────────────────────
 function httpsPost(hostname, path, headers, body) {
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify(body);
@@ -50,9 +47,7 @@ function httpsPost(hostname, path, headers, body) {
   });
 }
 
-// ─────────────────────────────────────────────
-// Gemini API
-// ─────────────────────────────────────────────
+
 async function callGemini(prompt) {
   if (!process.env.GEMINI_API_KEY) {
     throw new Error('GEMINI_API_KEY not set');
@@ -78,9 +73,6 @@ async function callGemini(prompt) {
   return text;
 }
 
-// ─────────────────────────────────────────────
-// Groq API (Fallback)
-// ─────────────────────────────────────────────
 async function callGroq(prompt) {
   if (!process.env.GROQ_API_KEY) {
     throw new Error('GROQ_API_KEY not set');
@@ -114,9 +106,7 @@ async function callGroq(prompt) {
   return text;
 }
 
-// ─────────────────────────────────────────────
-// Main AI Controller (Gemini → Groq fallback)
-// ─────────────────────────────────────────────
+
 async function callAI(prompt) {
   // Try Gemini
   if (process.env.GEMINI_API_KEY) {
@@ -139,9 +129,6 @@ async function callAI(prompt) {
   throw new Error('No AI API key set in .env');
 }
 
-// ─────────────────────────────────────────────
-// JSON Extractor
-// ─────────────────────────────────────────────
 function extractJSON(text) {
   // Remove markdown fences
   const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/);
@@ -169,7 +156,4 @@ function extractJSON(text) {
   );
 }
 
-// ─────────────────────────────────────────────
-// EXPORTS
-// ─────────────────────────────────────────────
 export { callAI, extractJSON };
