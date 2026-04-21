@@ -1,40 +1,38 @@
-
-import { createRequire } from "module";
-import 'dotenv/config';
 import admin from "firebase-admin";
-
-const require = createRequire(import.meta.url);
+import fs from "fs";
+import path from "path";
 
 let db;
 
 function initializeFirebase() {
-  if (admin.apps.length > 0) return admin.app();
-
-  let credential;
-
-  try {
-    const serviceAccount = require("./serviceAccountKey.json");
-    credential = admin.credential.cert(serviceAccount);
-    console.log("🔑 Using serviceAccountKey.json");
-  } catch {
-    credential = admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n").replace(/"/g, ''),
-    });
-    console.log("🔑 Using env credentials");
+  if (admin.apps.length > 0) {
+    return admin.firestore();
   }
 
-  admin.initializeApp({ credential });
-  console.log("✅ Firebase Admin ready");
-  return admin.app();
+  // 🔥 ALWAYS use JSON file (NO fallback)
+  const filePath = path.resolve("./config/serviceAccountKey.json");
+
+  if (!fs.existsSync(filePath)) {
+    throw new Error("❌ serviceAccountKey.json NOT found in /config folder");
+  }
+
+  const serviceAccount = JSON.parse(
+    fs.readFileSync(filePath, "utf-8")
+  );
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+
+  db = admin.firestore();
+
+  console.log("✅ Firebase connected (FINAL)");
+
+  return db;
 }
 
 function getDb() {
-  if (!db) {
-    initializeFirebase();
-    db = admin.firestore();
-  }
+  if (!db) return initializeFirebase();
   return db;
 }
 
