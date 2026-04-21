@@ -25,7 +25,7 @@ router.get('/interview/roles', (req, res) => {
 });
 
 // ─── GENERATE QUESTIONS ───────────────────────────────────────────────────────
-router.post('/interview/questions', requireAuth, async (req, res) => {
+router.post('/interview/questions', async (req, res) => {
   try {
     const { role } = req.body;
     if (!role) return res.status(400).json({ error: 'Role is required.' });
@@ -66,7 +66,7 @@ IMPORTANT:
 });
 
 // ─── EVALUATE ANSWER ──────────────────────────────────────────────────────────
-router.post('/interview/evaluate', requireAuth, async (req, res) => {
+router.post('/interview/evaluate', async (req, res) => {
   try {
     const { role, question, answer } = req.body;
 
@@ -125,7 +125,7 @@ Scoring guide: 90-100 = excellent, 75-89 = good, 60-74 = average, 40-59 = below 
 });
 
 // ─── INTERVIEW HISTORY ────────────────────────────────────────────────────────
-router.get('/interview/history', requireAuth, async (req, res) => {
+router.get('/interview/history', async (req, res) => {
   try {
     const db = getDb();
     const snapshot = await db
@@ -144,7 +144,7 @@ router.get('/interview/history', requireAuth, async (req, res) => {
 });
 
 // ─── RESUME ANALYZER ──────────────────────────────────────────────────────────
-router.post('/resume/analyze', requireAuth, async (req, res) => {
+router.post('/resume/analyze', async (req, res) => {
   try {
     const { resumeText, targetRole } = req.body;
 
@@ -210,7 +210,7 @@ Analyze this resume comprehensively and return ONLY a raw JSON object (no markdo
 });
 
 // ─── CAREER GUIDANCE ──────────────────────────────────────────────────────────
-router.post('/career/guidance', requireAuth, async (req, res) => {
+router.post('/career/guidance', async (req, res) => {
   try {
     const { skills, education, interests, experience } = req.body;
 
